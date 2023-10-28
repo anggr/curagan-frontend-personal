@@ -57,7 +57,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   try {
     const res = await axios.get(
-      `https://curagan-api.nikenhpsr.site/doctor/${id}`,
+      `https://curagan-be.up.railway.app/doctor/${id}`,
     );
     doctor = res.data;
   } catch (err) {

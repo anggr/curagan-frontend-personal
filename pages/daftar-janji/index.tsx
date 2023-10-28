@@ -119,7 +119,7 @@ const DaftarJanji = () => {
           appointment;
         return (
           <AppointmentCard
-            key={index}
+            key={appointmentId}
             appointmentId={appointmentId}
             patientID={patientID}
             doctorID={doctorID}
@@ -127,7 +127,7 @@ const DaftarJanji = () => {
             status={status}
             patientName={patientNames[patientID] || 'Unknown'}
             doctorName={doctorNames[doctorID] || 'Unknown'}
-            onUpdateStatus={updateAppointmentStatus} //
+            onUpdateStatus={updateAppointmentStatus}
           />
         );
       })}

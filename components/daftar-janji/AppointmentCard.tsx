@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { API_ACCEPT_APPOINTMENT, API_REJECT_APPOINTMENT } from '@/lib/ApiLinks';
 
 type AppointmentCardProps = {
@@ -22,7 +22,15 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
   doctorName,
   onUpdateStatus,
 }) => {
+  const [notification, setNotification] = useState<string | null>(null);
   const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    if (notification) {
+      const timer = setTimeout(() => setNotification(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [notification]);
 
   const handleAccept = async () => {
     try {
@@ -32,16 +40,19 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
           Authorization: `Bearer ${token}`,
         },
       });
-      const data = await response.json();
-      console.log('Accept response:', data);
-      onUpdateStatus(appointmentId, 'Accepted');
+      if (response.ok) {
+        const data = await response.json();
+        setNotification('Appointment has been accepted.');
+        onUpdateStatus(appointmentId, 'Accepted');
+      } else {
+        setNotification('Failed to accept the appointment.');
+      }
     } catch (error) {
-      console.error(
-        'An error occurred while accepting the appointment:',
-        error,
-      );
+      setNotification('An error occurred while accepting the appointment.');
     }
   };
+
+  const [rejectionReason, setRejectionReason] = useState<string>('FULL_BOOKED');
 
   const handleReject = async () => {
     try {
@@ -49,21 +60,27 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ rejectionReason }),
       });
-      const data = await response.json();
-      console.log('Reject response:', data);
-      onUpdateStatus(appointmentId, 'Rejected');
+      if (response.ok) {
+        const data = await response.json();
+        setNotification('Appointment has been rejected.');
+        onUpdateStatus(appointmentId, 'Rejected');
+      } else {
+        setNotification('Failed to reject the appointment.');
+      }
     } catch (error) {
-      console.error(
-        'An error occurred while rejecting the appointment:',
-        error,
-      );
+      setNotification('An error occurred while rejecting the appointment.');
     }
   };
 
   return (
     <div className="border rounded-lg p-4 mb-4">
+      {notification && (
+        <div className="bg-green-200 p-2 mb-4">{notification}</div>
+      )}
       <h2 className="text-lg font-semibold mb-2">
         Appointment ID: {appointmentId}
       </h2>
@@ -79,11 +96,20 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
           Accept
         </button>
         <button
-          className="bg-red-500 text-white px-4 py-2 rounded"
+          className="bg-red-500 text-white px-4 py-2 rounded ml-2"
           onClick={handleReject}
         >
           Reject
         </button>
+        <select
+          value={rejectionReason}
+          onChange={(e) => setRejectionReason(e.target.value)}
+        >
+          <option value="FULL_BOOKED">Full Booked</option>
+          <option value="NOT_ON_DUTY">Not on Duty</option>
+          <option value="OUT_OF_EXPERTISE">Out of Expertise</option>
+          <option value="UNAVAILABLE">Unavailable</option>
+        </select>
       </div>
     </div>
   );

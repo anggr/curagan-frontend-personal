@@ -81,11 +81,9 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
       {notification && (
         <div className="bg-green-200 p-2 mb-4">{notification}</div>
       )}
-      <h2 className="text-lg font-semibold mb-2">
-        Appointment ID: {appointmentId}
-      </h2>
-      <p>Patient Name: ({patientName})</p>
-      <p>Doctor Name: ({doctorName})</p>
+
+      <p>Patient Name: {patientName}</p>
+      <p>Doctor Name: {doctorName}</p>
       <p>Date & Time: {new Date(datetime).toLocaleString()}</p>
       <p>Status: {status}</p>
       <div className="mt-4">

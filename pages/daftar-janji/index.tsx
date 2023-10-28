@@ -5,6 +5,7 @@ import {
   API_PATIENT,
 } from '@/lib/ApiLinks';
 import AppointmentCard from '../../components/daftar-janji/AppointmentCard';
+import { LayoutWrapper } from '@/components/layout/LayoutWrapper';
 
 interface IAppointment {
   appointmentId: string;
@@ -114,23 +115,25 @@ const DaftarJanji = () => {
 
   return (
     <div>
-      {data.map((appointment, index) => {
-        const { appointmentId, patientID, doctorID, datetime, status } =
-          appointment;
-        return (
-          <AppointmentCard
-            key={appointmentId}
-            appointmentId={appointmentId}
-            patientID={patientID}
-            doctorID={doctorID}
-            datetime={datetime}
-            status={status}
-            patientName={patientNames[patientID] || 'Unknown'}
-            doctorName={doctorNames[doctorID] || 'Unknown'}
-            onUpdateStatus={updateAppointmentStatus}
-          />
-        );
-      })}
+      <LayoutWrapper>
+        {data.map((appointment, index) => {
+          const { appointmentId, patientID, doctorID, datetime, status } =
+            appointment;
+          return (
+            <AppointmentCard
+              key={appointmentId}
+              appointmentId={appointmentId}
+              patientID={patientID}
+              doctorID={doctorID}
+              datetime={datetime}
+              status={status}
+              patientName={patientNames[patientID] || 'Unknown'}
+              doctorName={doctorNames[doctorID] || 'Unknown'}
+              onUpdateStatus={updateAppointmentStatus}
+            />
+          );
+        })}
+      </LayoutWrapper>
     </div>
   );
 };

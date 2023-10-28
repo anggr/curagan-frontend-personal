@@ -93,6 +93,22 @@ const DaftarJanji = () => {
     fetchData();
   }, [token, doctorId]);
 
+  const updateAppointmentStatus = (
+    appointmentId: string,
+    newStatus: string,
+  ) => {
+    setData((prevData) => {
+      if (!prevData) return null;
+
+      return prevData.map((appointment) => {
+        if (appointment.appointmentId === appointmentId) {
+          return { ...appointment, status: newStatus };
+        }
+        return appointment;
+      });
+    });
+  };
+
   if (error) return <div>Failed to load</div>;
   if (!data) return <div>Loading...</div>;
 
@@ -111,6 +127,7 @@ const DaftarJanji = () => {
             status={status}
             patientName={patientNames[patientID] || 'Unknown'}
             doctorName={doctorNames[doctorID] || 'Unknown'}
+            onUpdateStatus={updateAppointmentStatus} //
           />
         );
       })}

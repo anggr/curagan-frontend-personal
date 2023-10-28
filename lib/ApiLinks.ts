@@ -15,3 +15,9 @@ export const API_APPOINTMENT_HISTORY =
 
 export const API_MY_APPOINTMENTS_ID = (id: string) =>
   `https://curagan-be.up.railway.app/appointments/my-appointments/${id}`;
+
+export const API_ACCEPT_APPOINTMENT = (id: string) =>
+  `https://curagan-be.up.railway.app/appointments/${id}/accept`;
+
+export const API_REJECT_APPOINTMENT = (id: string) =>
+  `https://curagan-be.up.railway.app/appointments/${id}/reject`;
